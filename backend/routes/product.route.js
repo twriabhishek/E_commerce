@@ -1,21 +1,52 @@
 const express = require("express");
 const router = express.Router();
 
-const {handleGetProduct, handleCreateProduct, handleUpdateProduct, handleDeleteProduct, handleGetProductOne} = require('../controllers/product.controller.js');
-const {isAuthenticated, authorizeRoles} = require("../middleware/auth.js");
+const {
+  handleGetProduct,
+  handleCreateProduct,
+  handleUpdateProduct,
+  handleDeleteProduct,
+  handleGetProductOne,
+  handleCreateProductReview,
+  handleGetProductReview,
+  handleDeleteProductReview
+} = require("../controllers/product.controller.js");
+const { isAuthenticated, authorizeRoles } = require("../middleware/auth.js");
 
-
-router.get("/getProduct" , handleGetProduct);
+router.get("/getProduct", handleGetProduct);
 router.get("/getProduct/:id", handleGetProductOne);
 
-
 //Admin Create Route
-router.post("/addProduct",isAuthenticated, authorizeRoles('admin'), handleCreateProduct);
+router.post(
+  "/admin/addProduct",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  handleCreateProduct
+);
 
 //Admin Update Route
-router.put("/updateProduct/:id",isAuthenticated, authorizeRoles('admin'), handleUpdateProduct);
+router.put(
+  "/admin/updateProduct/:id",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  handleUpdateProduct
+);
 
 //Admin Delete Route
-router.delete("/deleteProduct/:id",isAuthenticated, authorizeRoles('admin'), handleDeleteProduct);
+router.delete(
+  "/admin/deleteProduct/:id",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  handleDeleteProduct
+);
+
+//Add Update Review route
+router.put("/review", isAuthenticated, handleCreateProductReview);
+
+//Gwt All Review route
+router.get("/review", handleGetProductReview);
+
+//Delete Review route
+router.delete("/review", isAuthenticated, handleDeleteProductReview);
 
 module.exports = router;
